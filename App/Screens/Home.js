@@ -1,7 +1,17 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  FlatList,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import React from "react";
 import Header from "../Components/Header";
 
+// import LinearGradient from "react-native-linear-gradient";
+import { LinearGradient } from "expo-linear-gradient";
 export default function Home() {
   return (
     <View>
@@ -16,6 +26,29 @@ export default function Home() {
       />
 
       <Text style={styles.heading}>Select Category</Text>
+
+      {/* Option */}
+      <View style={{ marginTop: 20 }}>
+        <FlatList
+          data={[1, 1, 1, 1, 1, 1]}
+          horizontal
+          renderItem={({ item, index }) => {
+            return (
+              <TouchableOpacity>
+                <LinearGradient
+                  colors={["#24c6dc", "#514a9d"]}
+                  style={styles.linearGradient}
+                >
+                  <Text style={styles.catName}>Category {index + 1}</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            );
+          }}
+        />
+      </View>
+
+      {/* Top rated doctor */}
+      <Text style={styles.heading}>Top rated Doctor</Text>
     </View>
   );
 }
@@ -37,4 +70,18 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginBottom: 15,
   },
+  linearGradient: {
+    width: 120,
+    height: 80,
+    borderRadius: 18,
+    marginLeft: 10,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  catName: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "700",
+  },
+  heading: {},
 });

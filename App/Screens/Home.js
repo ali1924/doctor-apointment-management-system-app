@@ -90,7 +90,7 @@ export default function Home({ navigation }) {
                     status={index / 2 === 0 ? true : false}
                     onClick={()=>{
                         if(index/2===0){
-                            navigation.navigation('BookAppointment')
+                            navigation.navigate('BookAppointment')
                         }
                     }}
                   />

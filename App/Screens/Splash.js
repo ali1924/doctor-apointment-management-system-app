@@ -1,7 +1,13 @@
 import { View, Text, StyleSheet, Image } from "react-native";
-import React from "react";
+import React, {useEffect} from 'react';
 
-export default function Splash() {
+export default function Splash({navigation}) {
+  useEffect(() => {
+    setTimeout(() => {
+      navigation.navigate('Home');
+    }, 3000);
+  }, []);
+
   return (
     <View style={styles.container}>
       <Image

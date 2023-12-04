@@ -1,15 +1,63 @@
 import { View, Text, Image, StyleSheet } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../Components/Header";
 import { FlatList } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { TextInput } from "react-native";
 import CommonBtn from "../Components/CommonBtn";
 import { ScrollView } from "react-native";
+let DayList = [];
 
-export default function BookAppointment() {
-  const [selectedSlot, setSelectedSlot] = useState(0);
+export default function BookAppointment({ navigation }) {
+  const [selectedSlot, setSelectedSlot] = useState(-1);
   const [selectedGender, setSelectedGender] = useState("male");
+  const [selectedDay, setSelectedDay] = useState(-1);
+  const [slots, setSlots] = useState([
+    { sloT: "10:00-12:00PM", selected: false },
+    { sloT: "12:00-02:00PM", selected: false },
+    { sloT: "02:00-04:00PM", selected: false },
+    { sloT: "04:00-06:00PM", selected: false },
+    { sloT: "06:00-08:00PM", selected: false },
+    { sloT: "08:00-11:00PM", selected: false },
+  ]);
+  const [days, setDays] = useState([]);
+
+  useEffect(() => {
+    DaysList = [];
+    for (let i = 1; i <= getDays(new Date().getMonth() + 1); i++) {
+      DaysList.push({ day: i, selected: false });
+    }
+    setDays(DaysList);
+  }, []);
+  const getDays = (month) => {
+    let days = 0;
+    if (month == 1) {
+      days = 31;
+    } else if (month == 2) {
+      days = 28;
+    } else if (month == 3) {
+      days = 31;
+    } else if (month == 4) {
+      days = 30;
+    } else if (month == 5) {
+      days = 31;
+    } else if (month == 6) {
+      days = 30;
+    } else if (month == 7) {
+      days = 31;
+    } else if (month == 8) {
+      days = 31;
+    } else if (month == 9) {
+      days = 30;
+    } else if (month == 10) {
+      days = 31;
+    } else if (month == 11) {
+      days = 30;
+    } else if (month == 12) {
+      days = 31;
+    }
+    return days;
+  };
   return (
     <ScrollView style={styles.container}>
       <View style={styles.container}>
@@ -24,8 +72,47 @@ export default function BookAppointment() {
         <Text style={styles.docName}>Samia Nasir Nira</Text>
         <Text style={styles.docSpecialist}>Cardiologist</Text>
 
+        {/* Selected Date */}
+        <Text style={styles.heading}>Selected Date</Text>
+        <View style={{ marginTop: 20 }}>
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={days}
+            keyExtractor={({ item, index }) => index}
+            renderItem={({ item, index }) => {
+              return (
+                <TouchableOpacity
+                  style={{
+                    width: 60,
+                    height: 70,
+                    borderRadius: 20,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: selectedDay == index ? "blue" : "white",
+                    borderWidth: selectedDay == index ? 0 : 1,
+                    marginLeft: 10,
+                  }}
+                  onPress={() => {
+                    if (item.day < new Date().getDate()) {
+                    } else {
+                      setSelectedDay(index);
+                    }
+                  }}
+                >
+                  <Text
+                    style={{ color: selectedDay == index ? "#fff" : "blue" }}
+                  >
+                    {item.day}
+                  </Text>
+                </TouchableOpacity>
+              );
+            }}
+          />
+        </View>
+
         {/* Available Slot */}
-        <Text style={styles.heading}>Available Slot</Text>
+        <Text style={styles.heading}>Available Schedule</Text>
         <View>
           <FlatList
             numColumns={2}
@@ -108,7 +195,15 @@ export default function BookAppointment() {
           </TouchableOpacity>
         </View>
         <View style={styles.btnView}>
-          <CommonBtn w={300} h={45} txt={"Book Now"} status={true} />
+          <CommonBtn
+            w={300}
+            h={45}
+            txt={"Book Now"}
+            status={true}
+            onClick={() => {
+              navigation.navigate("Success");
+            }}
+          />
         </View>
       </View>
     </ScrollView>
@@ -146,6 +241,15 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginLeft: 15,
   },
+  singleDay: {
+    width: 60,
+    height: 70,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#1F2667",
+    marginLeft: 10,
+  },
   timeSlot: {
     width: "40%",
     height: 40,
@@ -179,4 +283,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   btnView: { marginTop: 20, marginBottom: 20 },
+  bottomView: {
+    width: "90%",
+    height: 60,
+    borderRadius: 10,
+    elevation: 5,
+    position: "absolute",
+    bottom: 20,
+    backgroundColor: "blue",
+    alignSelf: "center",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+  },
+  bottomIcon: {
+    width: 24,
+    height: 24,
+  },
 });
